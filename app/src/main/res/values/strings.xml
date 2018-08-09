@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Dont Be Late</string>
+    <string name="get_location_button">Minha Localização</string>
+    <string name="call_insetisan">Discar 25696969</string>
+    <string name="security_error">Erro de segurança, verifique as permissões</string>
+    <string name="take_picture_text">Tirar foto</string>
+</resources>

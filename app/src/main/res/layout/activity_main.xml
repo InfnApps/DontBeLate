@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/root"
+    tools:context=".MainActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:padding="@dimen/default_padding"
+        android:gravity="center"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/lat_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/default_spacing"
+            android:textSize="@dimen/font_size"
+            android:text="Lat:"/>
+        <TextView
+            android:id="@+id/lat_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/font_size"
+            android:layout_toRightOf="@id/lat_label"/>
+        <TextView
+            android:id="@+id/long_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/lat_label"
+            android:textSize="@dimen/font_size"
+            android:text="Long:"/>
+        <TextView
+            android:id="@+id/long_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/lat_value"
+            android:textSize="@dimen/font_size"
+            android:layout_alignLeft="@id/lat_value"/>
+        <ImageView
+            android:id="@+id/photo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/long_label"/>
+    </RelativeLayout>
+    <Button
+        android:id="@+id/call_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/call_insetisan"
+        android:onClick="requestCallPermission"/>
+
+    <Button
+        android:id="@+id/get_location_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/get_location_button"
+        android:onClick="requestUserLocation"/>
+    <Button
+        android:id="@+id/take_picture_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/take_picture_text"
+        android:onClick="takePicture"/>
+
+</LinearLayout>
