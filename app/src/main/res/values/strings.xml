@@ -9,4 +9,7 @@
     <string name="signin">Entrar</string>
     <string name="signup_text">Cadastrar</string>
     <string name="email_confirmation_prompt">Confirme o email</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

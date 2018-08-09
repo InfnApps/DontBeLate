@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/profile_item" android:title="profile" >Perfil do aluno</item>
+    <item android:id="@+id/attendance_item" android:title="attendance">Registro de presença</item>
+
+</menu>

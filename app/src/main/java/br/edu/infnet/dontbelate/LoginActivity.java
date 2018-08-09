@@ -29,12 +29,14 @@ public class LoginActivity extends AppCompatActivity {
 
         SharedPreferences preferences = getPreferences(MODE_PRIVATE);
 
-        String savedPassword = preferences.getString(email, null);
-        if (savedPassword != null){
-            if (password.equals(savedPassword)){
+        startActivity(new Intent(this, ManagerActivity.class));
 
-            }
-        }
+        String savedPassword = preferences.getString(email, null);
+//        if (savedPassword != null){
+//            if (password.equals(savedPassword)){
+//                startActivity(new Intent(this, ManagerActivity.class));
+//            }
+//        }
         //TODO: tratar o caso que não da certo
     }
 

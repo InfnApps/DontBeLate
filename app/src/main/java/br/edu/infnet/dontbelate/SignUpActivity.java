@@ -40,6 +40,7 @@ public class SignUpActivity extends AppCompatActivity {
                             SharedPreferences.Editor editor  = preferences.edit();
                             editor.putString(email,password);
                             editor.commit();
+                            finish();
                         }
                     }
                 }
