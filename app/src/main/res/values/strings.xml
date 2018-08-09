@@ -4,4 +4,9 @@
     <string name="call_insetisan">Discar 25696969</string>
     <string name="security_error">Erro de segurança, verifique as permissões</string>
     <string name="take_picture_text">Tirar foto</string>
+    <string name="email_prompt">Email</string>
+    <string name="password_prompt">Senha</string>
+    <string name="signin">Entrar</string>
+    <string name="signup_text">Cadastrar</string>
+    <string name="email_confirmation_prompt">Confirme o email</string>
 </resources>
