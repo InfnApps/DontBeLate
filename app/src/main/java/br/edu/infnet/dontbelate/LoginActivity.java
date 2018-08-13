@@ -48,7 +48,9 @@ public class LoginActivity extends AppCompatActivity {
                 byte[] hashBytes = md.digest();
                 String hashedWord = new String(hashBytes, "UTF-8");
                 if (hashedWord.equals(savedPassword)){
-                    startActivity(new Intent(this, ManagerActivity.class));
+                    Intent intent = new Intent(this, CryptoTestActivity.class);
+                    intent.putExtra("message", "Instituto Infnet é o melhor!");
+                    startActivity(intent);
                 } else {
                     Toast.makeText(this,
                             "Senha não confere",

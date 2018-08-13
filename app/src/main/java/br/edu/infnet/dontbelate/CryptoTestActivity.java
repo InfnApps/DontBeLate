@@ -18,26 +18,28 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
-public class ManagerActivity extends AppCompatActivity {
+public class CryptoTestActivity extends AppCompatActivity {
 
     final String PBE_ALGORITHM = "PBEWithSHA256And256BitAES-CBC-BC";
     final int NUM_OF_ITERATIONS = 1000;
     final int KEY_SIZE = 256;
     final byte[] SALT = "ababababababababababab".getBytes();
-    final byte[] IV = "2345678".getBytes();
+    final byte[] IV = "1234567890abcdef".getBytes();
     final String CIPHER_ALGORITHM = "AES/CBC/PKCS5Padding";
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_manager);
+        setContentView(R.layout.activity_crypto_test);
 
         Intent intent = getIntent();
         String message = intent.getStringExtra("message");
 
         String encrypted = encryptMessage(message);
-        String decrypted = decryptMessage(encrypted);
+
+
+        String decrypted = decryptMessage(message);
 
         TextView textView = findViewById(R.id.plaintext);
         textView.setText(message);
@@ -56,11 +58,12 @@ public class ManagerActivity extends AppCompatActivity {
             SecretKey tempKey = keyFactory.generateSecret(pbeKeySpec);
             SecretKey secretKey = new SecretKeySpec(tempKey.getEncoded(), "AES");
 
-            Cipher encrypter = Cipher.getInstance(CIPHER_ALGORITHM);
             IvParameterSpec ivSpec = new IvParameterSpec(IV);
-            encrypter.init(Cipher.ENCRYPT_MODE, secretKey, new SecureRandom(IV));
 
-            return  new String(encrypter.doFinal(), "UTF-8");
+            Cipher encrypter = Cipher.getInstance(CIPHER_ALGORITHM);
+            encrypter.init(Cipher.ENCRYPT_MODE, secretKey, ivSpec);
+
+            return  new String(encrypter.doFinal(message.getBytes()));
 
 
         } catch (NoSuchAlgorithmException exception){
@@ -93,12 +96,16 @@ public class ManagerActivity extends AppCompatActivity {
             SecretKey secretKey = new SecretKeySpec(tempKey.getEncoded(), "AES");
 
             IvParameterSpec ivSpec = new IvParameterSpec(IV);
+
+
             Cipher encrypter = Cipher.getInstance(CIPHER_ALGORITHM);
-            encrypter.init(Cipher.DECRYPT_MODE, secretKey, new SecureRandom(IV));
+            encrypter.init(Cipher.ENCRYPT_MODE, secretKey, ivSpec);
+            byte[] encrypted = encrypter.doFinal(message.getBytes());
 
+            Cipher decrypter = Cipher.getInstance(CIPHER_ALGORITHM);
+            decrypter.init(Cipher.DECRYPT_MODE, secretKey, ivSpec);
 
-            return  new String(encrypter.doFinal(), "UTF-8");
-
+            return  new String(decrypter.doFinal(encrypted));
 
         } catch (NoSuchAlgorithmException exception){
             Toast.makeText(this,
