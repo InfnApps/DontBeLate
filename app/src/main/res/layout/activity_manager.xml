@@ -7,10 +7,15 @@
     tools:context=".ManagerActivity">
 
 
-    <FrameLayout
-        android:id="@+id/replaceable_zone"
+    <!--<FrameLayout-->
+        <!--android:id="@+id/replaceable_zone"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"/>-->
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/attendance_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
 
     <android.support.design.widget.NavigationView
         android:id="@+id/navigation_view"
