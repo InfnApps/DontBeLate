@@ -6,6 +6,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -36,11 +41,33 @@ public class SignUpActivity extends AppCompatActivity {
                         //TODO: Validate fields
                         if (validateField()){
                             // Se validou, posso armazenar um novo usuário
-                            SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+                            SharedPreferences preferences = getSharedPreferences(
+                                                    Constants.DEFAULT_PREFS_FILE, MODE_PRIVATE);
                             SharedPreferences.Editor editor  = preferences.edit();
-                            editor.putString(email,password);
-                            editor.commit();
-                            finish();
+
+                            try {
+                                MessageDigest md = MessageDigest.getInstance("SHA-256");
+                                md.update(password.getBytes());
+                                byte[] hashBytes = md.digest();
+                                String hashedWord = new String(hashBytes, "UTF-8");
+                                Toast.makeText(SignUpActivity.this,
+                                        "" + email + ": " + hashedWord,
+                                        Toast.LENGTH_LONG).show();
+                                editor.putString(email, hashedWord);
+                                editor.commit();
+                                finish();
+                            } catch (NoSuchAlgorithmException exception){
+                                Toast.makeText(SignUpActivity.this,
+                                        "Algoritmo de criptografia inválido",
+                                        Toast.LENGTH_LONG).show();
+                            } catch (UnsupportedEncodingException exception){
+                                Toast.makeText(SignUpActivity.this,
+                                        "Problema de codificação",
+                                        Toast.LENGTH_LONG).show();
+                            }
+
+
+
                         }
                     }
                 }

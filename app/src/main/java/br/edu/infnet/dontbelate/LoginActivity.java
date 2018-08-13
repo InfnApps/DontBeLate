@@ -6,6 +6,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -27,16 +32,45 @@ public class LoginActivity extends AppCompatActivity {
         String password = field.getText().toString();
 
 
-        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+        SharedPreferences preferences = getSharedPreferences(
+                                        Constants.DEFAULT_PREFS_FILE, MODE_PRIVATE);
 
-        startActivity(new Intent(this, ManagerActivity.class));
+        //startActivity(new Intent(this, ManagerActivity.class));
+
+
 
         String savedPassword = preferences.getString(email, null);
-//        if (savedPassword != null){
-//            if (password.equals(savedPassword)){
-//                startActivity(new Intent(this, ManagerActivity.class));
-//            }
-//        }
+        if (savedPassword != null){
+
+            try {
+                MessageDigest md = MessageDigest.getInstance("SHA-256");
+                md.update(password.getBytes());
+                byte[] hashBytes = md.digest();
+                String hashedWord = new String(hashBytes, "UTF-8");
+                if (hashedWord.equals(savedPassword)){
+                    startActivity(new Intent(this, ManagerActivity.class));
+                } else {
+                    Toast.makeText(this,
+                            "Senha não confere",
+                            Toast.LENGTH_LONG).show();
+                }
+            } catch (NoSuchAlgorithmException exception){
+                Toast.makeText(LoginActivity.this,
+                        "Algoritmo de criptografia inválido",
+                        Toast.LENGTH_LONG).show();
+            } catch (UnsupportedEncodingException exception){
+                Toast.makeText(LoginActivity.this,
+                        "Problema de codificação",
+                        Toast.LENGTH_LONG).show();
+            }
+
+
+        }
+        else {
+            Toast.makeText(this,
+                    "Senha não encontrada",
+                    Toast.LENGTH_LONG).show();
+        }
         //TODO: tratar o caso que não da certo
     }
 
