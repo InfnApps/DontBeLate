@@ -38,8 +38,18 @@ public class LoginActivity extends AppCompatActivity {
         //startActivity(new Intent(this, ManagerActivity.class));
 
 
+        String savedPassword = null;
 
-        String savedPassword = preferences.getString(email, null);
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            md.update(email.getBytes());
+            byte[] hashmail = md.digest();
+            savedPassword = preferences.getString(new String(hashmail), null);
+        }
+        catch (NoSuchAlgorithmException exception){
+
+        }
+
         if (savedPassword != null){
 
             try {

@@ -53,7 +53,11 @@ public class SignUpActivity extends AppCompatActivity {
                                 Toast.makeText(SignUpActivity.this,
                                         "" + email + ": " + hashedWord,
                                         Toast.LENGTH_LONG).show();
-                                editor.putString(email, hashedWord);
+
+                                md.reset();
+                                md.update(email.getBytes());
+                                byte[] hashmail = md.digest();
+                                editor.putString(new String(hashmail), hashedWord);
                                 editor.commit();
                                 finish();
                             } catch (NoSuchAlgorithmException exception){

@@ -23,9 +23,12 @@ public class CryptoTestActivity extends AppCompatActivity {
     final String PBE_ALGORITHM = "PBEWithSHA256And256BitAES-CBC-BC";
     final int NUM_OF_ITERATIONS = 1000;
     final int KEY_SIZE = 256;
+    final String ENCONDING = "ISO-8859-1";
     final byte[] SALT = "ababababababababababab".getBytes();
     final byte[] IV = "1234567890abcdef".getBytes();
     final String CIPHER_ALGORITHM = "AES/CBC/PKCS5Padding";
+    final String KEY_DERIV_WORD = "infnet";
+
 
 
     @Override
@@ -53,7 +56,7 @@ public class CryptoTestActivity extends AppCompatActivity {
 
     public String encryptMessage(String message){
         try {
-            PBEKeySpec pbeKeySpec = new PBEKeySpec(message.toCharArray(), SALT, NUM_OF_ITERATIONS, KEY_SIZE);
+            PBEKeySpec pbeKeySpec = new PBEKeySpec(KEY_DERIV_WORD.toCharArray(), SALT, NUM_OF_ITERATIONS, KEY_SIZE);
             SecretKeyFactory keyFactory = SecretKeyFactory.getInstance(PBE_ALGORITHM);
             SecretKey tempKey = keyFactory.generateSecret(pbeKeySpec);
             SecretKey secretKey = new SecretKeySpec(tempKey.getEncoded(), "AES");
@@ -63,7 +66,7 @@ public class CryptoTestActivity extends AppCompatActivity {
             Cipher encrypter = Cipher.getInstance(CIPHER_ALGORITHM);
             encrypter.init(Cipher.ENCRYPT_MODE, secretKey, ivSpec);
 
-            return  new String(encrypter.doFinal(message.getBytes()));
+            return  new String(encrypter.doFinal(message.getBytes(ENCONDING)), ENCONDING);
 
 
         } catch (NoSuchAlgorithmException exception){
@@ -90,7 +93,7 @@ public class CryptoTestActivity extends AppCompatActivity {
 
     public String decryptMessage(String message){
         try {
-            PBEKeySpec pbeKeySpec = new PBEKeySpec(message.toCharArray(), SALT, NUM_OF_ITERATIONS, KEY_SIZE);
+            PBEKeySpec pbeKeySpec = new PBEKeySpec(KEY_DERIV_WORD.toCharArray(), SALT, NUM_OF_ITERATIONS, KEY_SIZE);
             SecretKeyFactory keyFactory = SecretKeyFactory.getInstance(PBE_ALGORITHM);
             SecretKey tempKey = keyFactory.generateSecret(pbeKeySpec);
             SecretKey secretKey = new SecretKeySpec(tempKey.getEncoded(), "AES");
@@ -100,12 +103,14 @@ public class CryptoTestActivity extends AppCompatActivity {
 
             Cipher encrypter = Cipher.getInstance(CIPHER_ALGORITHM);
             encrypter.init(Cipher.ENCRYPT_MODE, secretKey, ivSpec);
-            byte[] encrypted = encrypter.doFinal(message.getBytes());
+            byte[] encrypted = encrypter.doFinal(message.getBytes(ENCONDING));
+
+            String teste = new String(encrypted, ENCONDING);
 
             Cipher decrypter = Cipher.getInstance(CIPHER_ALGORITHM);
             decrypter.init(Cipher.DECRYPT_MODE, secretKey, ivSpec);
 
-            return  new String(decrypter.doFinal(encrypted));
+            return  new String(decrypter.doFinal(teste.getBytes(ENCONDING)), ENCONDING);
 
         } catch (NoSuchAlgorithmException exception){
             Toast.makeText(this,
