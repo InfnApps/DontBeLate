@@ -6,6 +6,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -32,16 +36,55 @@ public class SignUpActivity extends AppCompatActivity {
                         field = findViewById(R.id.password_field);
                         String password = field.getText().toString();
 
+                        if (validateFields(email, confirmation, password)){
+                            try {
+                                MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+
+                                messageDigest.update(password.getBytes());
+
+                                byte[] hashBytes = messageDigest.digest();
+
+                                // hash da senha
+                                String hashedPassword = new String(hashBytes);
+
+                                Toast.makeText(getApplicationContext(),
+                                        hashedPassword,
+                                        Toast.LENGTH_LONG).show();
+
+                                // armazenar o hash da senha
+                                SharedPreferences preferences = getSharedPreferences(
+                                        Constants.PREFERENCES_FILE,
+                                        MODE_PRIVATE);
+                                SharedPreferences.Editor editor = preferences.edit();
+                                // TODO: hash email too
+                                editor.putString(email, hashedPassword);
+                                editor.commit();
+
+                                // Sucesso, podemos encerrar esta Activity
+                                finish();
+
+                            } catch (NoSuchAlgorithmException exception){
+                                Toast.makeText(getApplicationContext(),
+                                        exception.getMessage(),
+                                        Toast.LENGTH_LONG).show();
+                            }
+
+                        }
+
+
+
 
                         //TODO: Validate fields
-                        if (validateField()){
-                            // Se validou, posso armazenar um novo usuário
-                            SharedPreferences preferences = getPreferences(MODE_PRIVATE);
-                            SharedPreferences.Editor editor  = preferences.edit();
-                            editor.putString(email,password);
-                            editor.commit();
-                            finish();
-                        }
+//                        if (validateFields()){
+//                            // Se validou, posso armazenar um novo usuário
+//                            SharedPreferences preferences = getSharedPreferences(
+//                                                                Constants.PREFERENCES_FILE,
+//                                                                MODE_PRIVATE);
+//                            SharedPreferences.Editor editor  = preferences.edit();
+//                            editor.putString(email,password);
+//                            editor.commit();
+//                            finish();
+//                        }
                     }
                 }
         );
@@ -49,7 +92,7 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
 
-    private boolean validateField(){
+    private boolean validateFields(String email, String confirmation, String password){
         //TODO: make it right!
         return true;
     }

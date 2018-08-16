@@ -23,7 +23,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".SignUpActivity" />
-        <activity android:name=".ManagerActivity"></activity>
+        <activity android:name=".ManagerActivity" />
+        <activity android:name=".CryptoActivity"></activity>
     </application>
 
 </manifest>

@@ -6,6 +6,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -27,16 +31,30 @@ public class LoginActivity extends AppCompatActivity {
         String password = field.getText().toString();
 
 
-        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+        SharedPreferences preferences = getSharedPreferences(
+                                            Constants.PREFERENCES_FILE,
+                                            MODE_PRIVATE);
+        String savedHashedPassword = preferences.getString(email, null);
 
-        startActivity(new Intent(this, ManagerActivity.class));
+        try {
+            MessageDigest messageDigest = MessageDigest.getInstance(Constants.DEFAULT_HASH_ALGORITHM);
+            messageDigest.update(password.getBytes());
+            String hashedPassword = new String(messageDigest.digest());
 
-        String savedPassword = preferences.getString(email, null);
-//        if (savedPassword != null){
-//            if (password.equals(savedPassword)){
-//                startActivity(new Intent(this, ManagerActivity.class));
-//            }
-//        }
+            if (savedHashedPassword != null && hashedPassword.equals(savedHashedPassword)){
+                startActivity(new Intent(this, ManagerActivity.class));
+            } else {
+                Toast.makeText(getApplicationContext(),
+                        "Senha não confere!",
+                        Toast.LENGTH_LONG).show();
+            }
+
+        } catch (NoSuchAlgorithmException exception){
+            Toast.makeText(getApplicationContext(),
+                    exception.getMessage(),
+                    Toast.LENGTH_LONG).show();
+        }
+
         //TODO: tratar o caso que não da certo
     }
 
