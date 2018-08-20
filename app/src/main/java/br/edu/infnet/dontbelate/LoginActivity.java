@@ -23,38 +23,72 @@ public class LoginActivity extends AppCompatActivity {
     //
     public void signIn(View view){
         //TODO: sign in code
-
         EditText field = findViewById(R.id.email_field);
         String email = field.getText().toString();
 
         field = findViewById(R.id.password_field);
         String password = field.getText().toString();
 
+        Intent intent = new Intent(this, NetworkActivity.class);
 
-        SharedPreferences preferences = getSharedPreferences(
-                                            Constants.PREFERENCES_FILE,
-                                            MODE_PRIVATE);
-        String savedHashedPassword = preferences.getString(email, null);
+        intent.putExtra("username", email);
+        intent.putExtra("password", password);
 
-        try {
-            MessageDigest messageDigest = MessageDigest.getInstance(Constants.DEFAULT_HASH_ALGORITHM);
-            messageDigest.update(password.getBytes());
-            String hashedPassword = new String(messageDigest.digest());
+        startActivity(intent);
 
-            if (savedHashedPassword != null && hashedPassword.equals(savedHashedPassword)){
-                startActivity(new Intent(this, ManagerActivity.class));
-            } else {
-                Toast.makeText(getApplicationContext(),
-                        "Senha não confere!",
-                        Toast.LENGTH_LONG).show();
-            }
-
-        } catch (NoSuchAlgorithmException exception){
-            Toast.makeText(getApplicationContext(),
-                    exception.getMessage(),
-                    Toast.LENGTH_LONG).show();
-        }
-
+//
+//
+//        SharedPreferences preferences = getSharedPreferences(
+//                                        Constants.DEFAULT_PREFS_FILE, MODE_PRIVATE);
+//
+//        //startActivity(new Intent(this, ManagerActivity.class));
+//
+//
+//        String savedPassword = null;
+//
+//        try {
+//            MessageDigest md = MessageDigest.getInstance("SHA-256");
+//            md.update(email.getBytes());
+//            byte[] hashmail = md.digest();
+//            savedPassword = preferences.getString(new String(hashmail), null);
+//        }
+//        catch (NoSuchAlgorithmException exception){
+//
+//        }
+//
+//        if (savedPassword != null){
+//
+//            try {
+//                MessageDigest md = MessageDigest.getInstance("SHA-256");
+//                md.update(password.getBytes());
+//                byte[] hashBytes = md.digest();
+//                String hashedWord = new String(hashBytes, "UTF-8");
+//                if (hashedWord.equals(savedPassword)){
+//                    Intent intent = new Intent(this, CryptoTestActivity.class);
+//                    intent.putExtra("message", "Instituto Infnet é o melhor!");
+//                    startActivity(intent);
+//                } else {
+//                    Toast.makeText(this,
+//                            "Senha não confere",
+//                            Toast.LENGTH_LONG).show();
+//                }
+//            } catch (NoSuchAlgorithmException exception){
+//                Toast.makeText(LoginActivity.this,
+//                        "Algoritmo de criptografia inválido",
+//                        Toast.LENGTH_LONG).show();
+//            } catch (UnsupportedEncodingException exception){
+//                Toast.makeText(LoginActivity.this,
+//                        "Problema de codificação",
+//                        Toast.LENGTH_LONG).show();
+//            }
+//
+//
+//        }
+//        else {
+//            Toast.makeText(this,
+//                    "Senha não encontrada",
+//                    Toast.LENGTH_LONG).show();
+//        }
         //TODO: tratar o caso que não da certo
     }
 
