@@ -23,6 +23,9 @@ public class LoginActivity extends AppCompatActivity {
 
     //
     public void signIn(View view){
+        //BYPASSS
+        startActivity(new Intent(this, MoodleActivity.class));
+
         //TODO: sign in code
 
         EditText field = findViewById(R.id.email_field);

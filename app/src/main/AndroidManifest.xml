@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -24,7 +25,9 @@
         </activity>
         <activity android:name=".SignUpActivity" />
         <activity android:name=".ManagerActivity" />
-        <activity android:name=".CryptoTestActivity"></activity>
+        <activity android:name=".CryptoTestActivity" />
+        <activity android:name=".NetworkActivity" />
+        <activity android:name=".MoodleActivity"></activity>
     </application>
 
 </manifest>
