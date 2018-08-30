@@ -19,4 +19,5 @@
     <string name="arrival_placeholder">07:00</string>
     <string name="depart_placeholder">9:30</string>
     <string name="arrival_label">Chegada:</string>
+    <string name="moodle_pass_prompt">Senha do Moodle</string>
 </resources>

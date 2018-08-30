@@ -23,18 +23,6 @@
 
     </android.support.design.widget.TextInputLayout>
 
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <EditText
-            android:id="@+id/email_confirmation_field"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textEmailAddress"
-            android:hint="@string/email_confirmation_prompt"/>
-
-    </android.support.design.widget.TextInputLayout>
 
 
     <android.support.design.widget.TextInputLayout
@@ -49,11 +37,25 @@
             android:inputType="textPassword" />
     </android.support.design.widget.TextInputLayout>
 
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/moodle_password_field"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPassword"
+            android:hint="@string/moodle_pass_prompt"/>
+
+    </android.support.design.widget.TextInputLayout>
+
 
     <Button
         android:id="@+id/signup_button"
         android:text="@string/signup_text"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:onClick="createUser"/>
 
 </LinearLayout>
