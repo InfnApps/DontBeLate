@@ -1,6 +1,8 @@
 package br.edu.infnet.dontbelate;
 
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Patterns;
@@ -22,7 +24,8 @@ import java.security.NoSuchAlgorithmException;
 
 import javax.net.ssl.HttpsURLConnection;
 
-public class SignUpActivity extends AppCompatActivity implements Runnable {
+public class SignUpActivity extends AppCompatActivity
+        implements MoodleAuthTask.OnTaskCompleteListener {
 
     Button signUpButton;
     private final String VALID_EMAIL_SUFFIX = "infnet.edu.br";
@@ -43,73 +46,43 @@ public class SignUpActivity extends AppCompatActivity implements Runnable {
 
     }
 
-    private boolean validateWithMoodle(String username, String password){
-        String baseurl = "https://lms.infnet.edu.br/moodle/login/token.php" +
-                "?username=%s&password=%s&service=moodle_mobile_app";
-        // TODO: discriminar cada exceção
-        try {
-            URL url = new URL(String.format(baseurl, username, password));
-            HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
-            // pega um objeto que sabe ler dados da conexão (bytes)
-            InputStream in = connection.getInputStream();
-            // A partir de quem sabe ler bytes, construímos quem sabe ler caracteres
-            InputStreamReader reader = new InputStreamReader(in);
-            // A partir de quem sabe ler caracteres construímos quem sabe ler caracteres
-            // de forma controlada
-            BufferedReader bufferedReader = new BufferedReader(reader);
-            String line = bufferedReader.readLine();
-            String texto = "";
-            while (line != null) {
-                texto = texto + line; //texto += line
-                line = bufferedReader.readLine();
-            }
-            if (texto.contains(MOODLE_VALIDATION_WORD)){
-                return true;
-            }
-        } catch (Exception exception){
-            return false;
-        }
-        return true;
-    }
 
-    private boolean validateFields(String email, String password){
+    private boolean validateFields(String email, String password) {
 
-        if(!email.endsWith(VALID_EMAIL_SUFFIX)){
+        if (!email.endsWith(VALID_EMAIL_SUFFIX)) {
             return false;
         }
 
-        if (password.length() < PASSWORD_MINIMUM_LENGHT){
+        if (password.length() < PASSWORD_MINIMUM_LENGHT) {
             return false;
         }
 
         return true;
     }
 
-    public void createUser(View view){
+    public void createUser(View view) {
         // Pegar os campos
         EditText field = findViewById(R.id.email_field);
         email = field.getText().toString();
 
         field = findViewById(R.id.password_field);
-        String password = field.getText().toString();
+        password = field.getText().toString();
 
         field = findViewById(R.id.moodle_password_field);
         moodlePassword = field.getText().toString();
 
-        if (validateFields(email, password)){
-            progressBar.setVisibility(View.VISIBLE);
+        if (validateFields(email, password)) {
             //aqui pode demorar
-            new Thread(
-                    this
-            ).start();
-        } else {
-            Toast.makeText(this, "Não validou", Toast.LENGTH_LONG).show();
+            MoodleAuthTask task = new MoodleAuthTask();
+            task.setOnTaskCompleteListener(this);
+            task.execute(email, password, moodlePassword);
         }
     }
 
     @Override
-    public void run() {
-        if (validateWithMoodle(email, moodlePassword)){
+    public void onTaskComplete(boolean success) {
+        progressBar.setVisibility(View.GONE);
+        if (false) {
             try {
                 MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
                 messageDigest.update(password.getBytes());
@@ -125,30 +98,22 @@ public class SignUpActivity extends AppCompatActivity implements Runnable {
                 // TODO: hash email too
                 editor.putString(email, hashedPassword);
                 editor.commit();
-
+                finish();
                 // Sucesso, podemos encerrar esta Activity
-                runOnUiThread(
-                        new Runnable() {
-                            @Override
-                            public void run() {
-                                progressBar.setVisibility(View.GONE);
-                                finish();
-                            }
-                        }
-                );
-
-            } catch (NoSuchAlgorithmException exception){
+            } catch (NoSuchAlgorithmException exception) {
                 Toast.makeText(getApplicationContext(),
                         exception.getMessage(),
                         Toast.LENGTH_LONG).show();
             }
+        } else {
+            Snackbar.make(findViewById(R.id.root_view),
+                    getString(R.string.auth_fail),
+                    Snackbar.LENGTH_LONG
+            ).show();
+//            Toast.makeText(getApplicationContext(),
+//                    "FALHOU",
+//                    Toast.LENGTH_LONG).show();
         }
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                progressBar.setVisibility(View.GONE);
-            }
-        });
-
     }
+
 }

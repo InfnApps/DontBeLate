@@ -20,4 +20,7 @@
     <string name="depart_placeholder">9:30</string>
     <string name="arrival_label">Chegada:</string>
     <string name="moodle_pass_prompt">Senha do Moodle</string>
+
+
+    <string name="auth_fail">Falha de autenticação (Moodle)</string>
 </resources>
